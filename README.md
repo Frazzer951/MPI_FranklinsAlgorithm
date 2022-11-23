@@ -12,7 +12,7 @@ Luke Eltiste lukeeltiste@csu.fullerton.edu
 
 Either
 
-```sh
+```shell
 mpic++ ring_election.cpp -o ring_election
 
 mpirun -n number_nodes ./ring_election
@@ -20,6 +20,6 @@ mpirun -n number_nodes ./ring_election
 
 Or
 
-```sh
+```shell
  ./compile_run.sh n
 ```
