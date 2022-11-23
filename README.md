@@ -33,7 +33,6 @@ def franklins_algorithm():
     rank = get_rank()
     size = get_size()
     is_active = True
-    current_round = 0
     is_leader = False
     running = True
 
@@ -48,8 +47,8 @@ def franklins_algorithm():
 
     while running:
         if is_active:
-            send [rank, current_round] to left
-            send [rank, current_round] to right
+            send [rank] to left
+            send [rank] to right
 
             receive q from left
             receive r from right
@@ -60,7 +59,6 @@ def franklins_algorithm():
             else if max_v == rank:
                 is_leader = True
                 running = False
-            current_round += 1
         else:
             receive q from left
             receive r from right
