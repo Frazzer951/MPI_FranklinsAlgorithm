@@ -36,8 +36,8 @@ def franklins_algorithm():
     is_leader = False
     running = True
 
-    q = [0,0] # id, round
-    r = [0,0] # id, round
+    q = [0] # id, round
+    r = [0] # id, round
 
     left = rank-1
     right = (rank+1)%size
