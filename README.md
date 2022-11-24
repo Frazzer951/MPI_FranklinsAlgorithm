@@ -32,12 +32,11 @@ Or
 def franklins_algorithm():
     rank = get_rank()
     size = get_size()
-    is_active = True
-    is_leader = False
-    running = True
 
-    q = [0] # id, round
-    r = [0] # id, round
+    id = genRandomId()
+    is_active = True
+
+    q = r = 0
 
     left = rank-1
     right = (rank+1)%size
@@ -47,32 +46,23 @@ def franklins_algorithm():
 
     while running:
         if is_active:
-            send [rank] to left
-            send [rank] to right
-
+            send id to right
             receive q from left
+
+            send id to left
             receive r from right
 
-            max_v = max(q[0],r[0])
-            if max_v > rank:
+            max_v = max(q,r)
+            if max_v > id:
                 is_active = False
-            else if max_v == rank:
-                is_leader = True
-                running = False
+            else if max_v == id:
+                break
         else:
             receive q from left
-            receive r from right
-
-            if q[0] == -1 or r[0] == -1:
-                # leader found
-                running = False
-                print(f"{rank} is now leader")
-
             send q to right
+
+            receive r from right
             send r to left
 
-    if is_leader:
-        # send out message to inform leader has been found
-        send [-1, 0] to left
-        send [-1, 0] to right
+    # leader breaks out of loop and kills rest of processes
 ```
