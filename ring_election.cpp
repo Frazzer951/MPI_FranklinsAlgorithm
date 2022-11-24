@@ -7,10 +7,6 @@ int main(int argc, char *argv[])
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    MPI_Request ireq_1;
-    MPI_Status istatus_1;
-    MPI_Request ireq_2;
-    MPI_Status istatus_2;
 
     bool is_active = true;
     bool is_leader = false;
@@ -31,17 +27,14 @@ int main(int argc, char *argv[])
         if (is_active)
         {
             std::cout << rank << " is sending to " << left << std::endl;
-            MPI_Isend(&send, 1, MPI_INT, left, 0, MPI_COMM_WORLD, &ireq_1);
+            MPI_Send(&send, 1, MPI_INT, left, 0, MPI_COMM_WORLD);
             std::cout << rank << " is sending to " << right << std::endl;
-            MPI_Isend(&send, 1, MPI_INT, right, 0, MPI_COMM_WORLD, &ireq_2);
+            MPI_Send(&send, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
 
-            MPI_Irecv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, &ireq_1);
+            MPI_Recv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << left << std::endl;
-            MPI_Irecv(&r, 1, MPI_INT, right, 0, MPI_COMM_WORLD, &ireq_2);
+            MPI_Recv(&r, 1, MPI_INT, right, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << right << std::endl;
-
-            MPI_Wait(&ireq_1, &istatus_1);
-            MPI_Wait(&ireq_2, &istatus_2);
 
             int max_v = (q[0] < r[0]) ? r[0] : q[0];
             if (max_v > rank)
@@ -62,12 +55,9 @@ int main(int argc, char *argv[])
         }
         else
         {
-            MPI_Irecv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, &ireq_1);
-            MPI_Irecv(&r, 1, MPI_INT, right, 0, MPI_COMM_WORLD, &ireq_2);
-
-            MPI_Wait(&ireq_1, &istatus_1);
+            MPI_Recv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << left << " passive" << std::endl;
-            MPI_Wait(&ireq_2, &istatus_2);
+            MPI_Recv(&r, 1, MPI_INT, right, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << right << " passive" << std::endl;
 
             if (q[0] == -1 or r[0] == -1)
@@ -76,10 +66,10 @@ int main(int argc, char *argv[])
                 running = false;
             }
 
-            MPI_Isend(&r, 1, MPI_INT, left, 0, MPI_COMM_WORLD, &ireq_1);
-            std::cout << rank << " is relaying to " << left << std::endl;
-            MPI_Isend(&q, 1, MPI_INT, right, 0, MPI_COMM_WORLD, &ireq_2);
+            MPI_Send(&q, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
             std::cout << rank << " is relaying to " << right << std::endl;
+            MPI_Send(&r, 1, MPI_INT, left, 0, MPI_COMM_WORLD);
+            std::cout << rank << " is relaying to " << left << std::endl;
         }
     }
 
