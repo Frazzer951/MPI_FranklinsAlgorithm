@@ -28,13 +28,13 @@ int main(int argc, char *argv[])
         {
             std::cout << rank << " is sending to " << left << std::endl;
             MPI_Send(&send, 1, MPI_INT, left, 0, MPI_COMM_WORLD);
-            std::cout << rank << " is sending to " << right << std::endl;
-            MPI_Send(&send, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
-
-            MPI_Recv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            std::cout << rank << " received from " << left << std::endl;
             MPI_Recv(&r, 1, MPI_INT, right, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << right << std::endl;
+
+            std::cout << rank << " is sending to " << right << std::endl;
+            MPI_Send(&send, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
+            MPI_Recv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            std::cout << rank << " received from " << left << std::endl;
 
             int max_v = (q[0] < r[0]) ? r[0] : q[0];
             if (max_v > rank)
@@ -57,19 +57,19 @@ int main(int argc, char *argv[])
         {
             MPI_Recv(&q, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << left << " passive" << std::endl;
+            std::cout << rank << " is relaying to " << right << std::endl;
+            MPI_Send(&q, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
+
             MPI_Recv(&r, 1, MPI_INT, right, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             std::cout << rank << " received from " << right << " passive" << std::endl;
+            std::cout << rank << " is relaying to " << left << std::endl;
+            MPI_Send(&r, 1, MPI_INT, left, 0, MPI_COMM_WORLD);
 
             if (q[0] == -1 or r[0] == -1)
             {
                 // leader found
                 running = false;
             }
-
-            MPI_Send(&q, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
-            std::cout << rank << " is relaying to " << right << std::endl;
-            MPI_Send(&r, 1, MPI_INT, left, 0, MPI_COMM_WORLD);
-            std::cout << rank << " is relaying to " << left << std::endl;
         }
     }
 
