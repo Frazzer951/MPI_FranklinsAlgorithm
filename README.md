@@ -4,9 +4,14 @@ Project 2: Implement a distributed algorithm using MPI
 
 Ring Election with Franklin’s Algorithm
 
-Group members:
+## Group members
 
 Luke Eltiste lukeeltiste@csu.fullerton.edu
+
+## Files
+
+- [Report - Project_2_Report.pdf](./Project_2_Report.pdf)
+- [Example Output - example_output.txt](./example_output.txt)
 
 ## How to run
 
