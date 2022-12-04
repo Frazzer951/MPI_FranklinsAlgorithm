@@ -1,0 +1,14 @@
+0 continues to next round
+1 is now passive with id: 846930886
+2 is now passive with id: 1681692777
+3 is now passive with id: 1714636915
+4 continues to next round
+4 continues to next round
+5 is now passive with id: 424238335
+6 is now passive with id: 719885386
+7 continues to next round
+7 is now passive with id: 1649760492
+8 is now passive with id: 596516649
+9 is now passive with id: 1189641421
+0 is now passive with id: 1804289383
+4 is now the leader with id: 1957747793

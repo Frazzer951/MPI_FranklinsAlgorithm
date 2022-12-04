@@ -44,7 +44,7 @@ def franklins_algorithm():
     if rank == 0:
         left = size-1
 
-    while running:
+    while True:
         if is_active:
             send id to right
             receive q from left
