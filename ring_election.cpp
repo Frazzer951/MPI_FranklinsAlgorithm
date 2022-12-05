@@ -3,6 +3,8 @@
 
 int genIdentifier(int rank, int size)
 {
+    srand(time(NULL));
+
     int *nums;
     nums = new int[size];
 
@@ -10,8 +12,9 @@ int genIdentifier(int rank, int size)
     {
         nums[i] = rand();
     }
-
-    return nums[rank];
+    int id = nums[rank];
+    id = id - (id % 1000) + rank;
+    return id;
 }
 
 int main(int argc, char *argv[])
@@ -22,7 +25,7 @@ int main(int argc, char *argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     int id = genIdentifier(rank, size); // get random id
-    bool is_active = true;
+    bool is_active = (id / 1000) % 2 == 0;
 
     int q, r;
 
@@ -31,6 +34,9 @@ int main(int argc, char *argv[])
 
     if (rank == 0)
         left = size - 1;
+
+    if (is_active)
+        std::cout << rank << " is active with id: " << id << std::endl;
 
     while (true)
     {
